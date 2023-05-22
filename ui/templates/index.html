@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+<style>
+    body {
+      font-family: Arial;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    form.ecc-class input[type=text] {
+      padding: 10px;
+      font-size: 17px;
+      border: 1px solid grey;
+      float: left;
+      width: 80%;
+      background: #f1f1f1;
+    }
+
+    form.ecc-class button {
+      float: left;
+      width: 20%;
+      padding: 10px;
+      background: #2196F3;
+      color: white;
+      font-size: 17px;
+      border: 1px solid grey;
+      border-left: none;
+      cursor: pointer;
+    }
+
+    form.ecc-class button:hover {
+      background: #0b7dda;
+    }
+
+    form.ecc-class::after {
+      content: "";
+      clear: both;
+      display: table;
+    }
+
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+</style>
+</head>
+<body>
+    <h1 class="ecc-class" style="margin:auto;max-width:500px" >Engineering Cloud Computing</h1>
+    <div class="ecc-class" style="margin:5%;">
+        {% if job_running %}
+        <p class="ecc-class" style="margin:auto;max-width:500px;color: crimson;">Map Reduce job is running...</p>
+        <p class="ecc-class" style="margin:auto;max-width:500px;color: crimson;">Search is disabled. Please try after sometime.</p>
+        <br>
+        {% endif %}
+
+        {% if error_msg %}
+        <p class="ecc-class" style="margin:auto;max-width:500px;color: crimson;">{{ error_msg }}</p>
+        <br>
+        {% endif %}
+
+        <h2 class="ecc-class" style="margin:auto;max-width:500px">Bookstore Search</h2>
+        <br>
+        <form class="ecc-class" action="{{ url_for('handle_data') }}" style="margin:auto;max-width:500px" method="post">
+          <input type="text" placeholder="Enter Search Query.." name="query">
+          {% if not job_running %}
+            <button type="submit">Search</i></button>
+          {% else %}
+            <button type="submit" disabled>Search</i></button>
+          {% endif %}
+        </form>
+        {% if display_results %}
+        <div style="margin:auto;max-width:50%;">
+            <h2>Results</h2>
+            <p>{{ data|length }} books found.</p>
+            <table >
+              <tr>
+                <th>Book Name</th>
+                <th>Word Frequency Score</th>
+              </tr>
+              {% for row in data %}
+              <tr>
+                <td>{{ row.book }}</td>
+                <td>{{ row.score }}</td>
+              </tr>
+              {% endfor %}
+            </table>
+        </div>
+        {% endif %}
+  </div>
+</body>
+</html> 
